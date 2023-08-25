@@ -2,6 +2,7 @@
 Database models.
 """
 from django.db import models
+from django.utils.timezone import now
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -38,7 +39,16 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    date_joined = models.DateTimeField(default=now, editable=False)
 
+    """
+    PermissionsMixin automaticamente genera los fiels de
+
+    'id','password','last_login','is_superuser','email','name', 'is_active',
+    'is_staff', 'groups', 'user_permissions'
+
+    Falta 'username', 'first_name', 'last_name', 'date_joined'
+    """
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
