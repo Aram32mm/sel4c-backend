@@ -31,8 +31,6 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'testpass123',
             'name': 'Test Name',
-            'first_name': 'Test First Name',
-            'last_name': 'Test Last Name',
         }
         # post test to url
         res = self.client.post(CREATE_USER_URL, payload)
@@ -52,8 +50,6 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'testpass123',
             'name': 'Test Name',
-            'first_name': 'Test First Name',
-            'last_name': 'Test Last Name',
         }
         create_user(**payload)
         res = self.client.post(CREATE_USER_URL, payload)
@@ -67,8 +63,6 @@ class PublicUserApiTests(TestCase):
             'email': 'test@example.com',
             'password': 'pw',
             'name': 'Test name',
-            'first_name': 'Test First Name',
-            'last_name': 'Test Last Name',
         }
         res = self.client.post(CREATE_USER_URL, payload)
 
@@ -84,8 +78,6 @@ class PublicUserApiTests(TestCase):
             'name': 'Test Name',
             'email': 'test@example.com',
             'password': 'test-user-password123',
-            'first_name': 'Test First Name',
-            'last_name': 'Test Last Name',
         }
         create_user(**user_details)
 
@@ -139,8 +131,6 @@ class PrivateUserApiTests(TestCase):
             email='test@example.com',
             password='testpass123',
             name='Test Name',
-            first_name='Test First Name',
-            last_name='Test Last Name',
         )
         self.client = APIClient()
         # para no tener que hacer una autenticación real
@@ -154,9 +144,6 @@ class PrivateUserApiTests(TestCase):
         self.assertEqual(res.data, {
             'name': self.user.name,
             'email': self.user.email,
-            'first_name': self.user.first_name,
-            'last_name': self.user.last_name,
-
         })
 
     def test_post_me_not_allowed(self):

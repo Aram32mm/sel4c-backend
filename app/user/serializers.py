@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ['email', 'password', 'name', 'first_name', "last_name"]
+        fields = ['email', 'password', 'name']
         # no se puede leer una contraseña, el largo mínimo es 5
         extra_kwargs = {'password': {'write_only': True, 'min_length': 5}}
 

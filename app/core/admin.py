@@ -19,8 +19,6 @@ class UserAdmin(BaseUserAdmin):
             {
                 'fields': (
                     'name',
-                    'first_name',
-                    'last_name',
                 )
             }
         ),
@@ -54,8 +52,6 @@ class UserAdmin(BaseUserAdmin):
                 'password1',
                 'password2',
                 'name',
-                'first_name',
-                'last_name',
                 'is_active',
                 'is_staff',
                 'is_superuser',

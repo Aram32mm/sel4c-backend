@@ -22,8 +22,6 @@ class AdminSiteTests(TestCase):
             email='user@example.com',
             password='testpass123',
             name='Test User',
-            first_name='Test User',
-            last_name='User Last',
         )
 
     def test_users_lists(self):

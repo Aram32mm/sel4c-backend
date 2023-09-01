@@ -41,15 +41,12 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     ####
     date_joined = models.DateTimeField(default=now, editable=False)
-    first_name = models.CharField(max_length=255, null=True, blank=True)
-    last_name = models.CharField(max_length=255, null=True, blank=True)
-
     """
     PermissionsMixin genera automáticamente los campos:
     'id','password','last_login','is_superuser','email','name', 'is_active',
     'is_staff', 'groups', 'user_permissions'
 
-    Campos faltantes: 'first_name', 'last_name', 'date_joined'
+    Campos faltantes: 'date_joined'
     """
     objects = UserManager()
 
