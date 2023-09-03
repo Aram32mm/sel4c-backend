@@ -73,10 +73,9 @@ class UserData(models.Model):
 
 
 class Activity(models.Model):
-    """Objeto de Actividad"""
-    id = models.FloatField(primary_key=True)
-    title = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    title = models.CharField(max_length=100)
+    description = models.TextField()
+    parent_activity = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='sub_activities')  # noqa
 
     def __str__(self):
         return self.title
@@ -84,8 +83,7 @@ class Activity(models.Model):
 
 class FormsQuestion(models.Model):
     """Objeto de Pregunta de Formulario """
-    id = models.BigAutoField(primary_key=True)
-    question = models.CharField(max_length=255)
+    question = models.CharField(max_length=100)
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -94,11 +92,11 @@ class FormsQuestion(models.Model):
 
 class AcitvityResponse(models.Model):
     """Objeto de Respuesta de Actividad"""
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    activity = models.OneToOneField(
+    activity = models.ForeignKey(
         Activity,
         on_delete=models.CASCADE,
     )
@@ -108,14 +106,17 @@ class AcitvityResponse(models.Model):
     def __str__(self):
         return self.response
 
+    class Meta:
+        unique_together = ('user', 'activity')
+
 
 class FormsQuestionResponse(models.Model):
     """Objeto de Respuesta a Pregunta de Formulario"""
-    user = models.OneToOneField(
+    user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    question = models.OneToOneField(
+    question = models.ForeignKey(
         FormsQuestion,
         on_delete=models.CASCADE,
     )
@@ -124,3 +125,6 @@ class FormsQuestionResponse(models.Model):
 
     def __str__(self):
         return self.response
+
+    class Meta:
+        unique_together = ('user', 'question')
