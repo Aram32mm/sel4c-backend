@@ -6,11 +6,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework import permissions
 from rest_framework.exceptions import NotFound, ValidationError
 
-from core.models import (
-    Activity,
-    FormsQuestion,
-)
-from methodology import serializers
+from core.models import Activity, FormsQuestion
+from methodology.serializers import ActivitySerializer, FormsQuestionSerializer
 
 
 class IsSuperUserOrReadOnly(permissions.BasePermission):
@@ -30,15 +27,15 @@ class IsSuperUserOrReadOnly(permissions.BasePermission):
 
 class ActivityViewSet(viewsets.ModelViewSet):
     """Administra las Actividades (Se tiene que ser SuperAdmin)"""
-    serializer_class = serializers.ActivitySerializer
+    serializer_class = ActivitySerializer
     queryset = Activity.objects.all().order_by('title')
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsSuperUserOrReadOnly]
 
 
-class SubActivityViewSet(generics.ListAPIView):
-    """Devuelve las Sub-Activities de una Actividad Padre (Se tiene que ser SuperAdmin)"""  # noqa
-    serializer_class = serializers.ActivitySerializer
+class SubActivityView(generics.ListAPIView):
+    """Devuelve las Sub-Activities de una Actividad Padre """
+    serializer_class = ActivitySerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsSuperUserOrReadOnly]
 
@@ -59,7 +56,7 @@ class SubActivityViewSet(generics.ListAPIView):
 
 class FormsQuestionViewSet(viewsets.ModelViewSet):
     """Administra las Preguntas del Forms (Se tiene que ser SuperAdmin)"""
-    serializer_class = serializers.FormsQuestionSerializer
+    serializer_class = FormsQuestionSerializer
     queryset = FormsQuestion.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsSuperUserOrReadOnly]

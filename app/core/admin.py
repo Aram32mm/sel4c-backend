@@ -61,3 +61,8 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(models.User, UserAdmin)
+admin.site.register(models.UserData)
+admin.site.register(models.Activity)
+admin.site.register(models.FormsQuestion)
+admin.site.register(models.ActivityResponse)
+admin.site.register(models.FormsQuestionResponse)

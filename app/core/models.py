@@ -90,7 +90,7 @@ class FormsQuestion(models.Model):
         return self.question
 
 
-class AcitvityResponse(models.Model):
+class ActivityResponse(models.Model):
     """Objeto de Respuesta de Actividad"""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
