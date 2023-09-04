@@ -103,7 +103,7 @@ class ModelTests(TestCase):
             title='Sample activity name ',
             description='Sample activity description.',
         )
-        activity_response = models.AcitvityResponse.objects.create(
+        activity_response = models.ActivityResponse.objects.create(
             user=user,
             activity=activity,
             response='Response',

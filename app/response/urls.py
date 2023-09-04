@@ -20,6 +20,6 @@ app_name = 'response'
 urlpatterns = [
     path('', include(router.urls)),
     path('activities-responses/', views.AllActivitiesResponsesView.as_view(), name ="activites responses"),  # noqa
-    path('questions-responses/', views.AllFormsQuestionResponsesView.as_view(), name ="questions responses"),  #noqa
+    path('questions-responses/', views.AllFormsQuestionResponsesView.as_view(), name ="questions responses"),  # noqa
 
 ]

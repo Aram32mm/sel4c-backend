@@ -11,6 +11,7 @@ from response.serializers import (
     FormsQuestionResponseSerializer,
 )
 
+
 class AllActivitiesResponsesView(generics.ListAPIView):
     """Lista Toda la Info de todos los Usuarios para Admins (Requiere Autenticación)"""  # noqa
     serializer_class = ActivityResponseSerializer
@@ -19,6 +20,7 @@ class AllActivitiesResponsesView(generics.ListAPIView):
 
     def get_queryset(self):
         return ActivityResponse.objects.all().order_by('user_id')
+
 
 class AllFormsQuestionResponsesView(generics.ListAPIView):
     """Lista Toda la Info de todos los Usuarios para Admins (Requiere Autenticación)"""  # noqa
@@ -37,7 +39,8 @@ class ActivityResponseViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user).order_by('activity_id')
+        return self.queryset.filter(user=self.request.user).order_by('activity_id')  # noqa
+
 
 class FormsQuestionResponseViewSet(viewsets.ModelViewSet):
     serializer_class = FormsQuestionResponseSerializer
@@ -46,4 +49,4 @@ class FormsQuestionResponseViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return self.queryset.filter(user=self.request.user).order_by('question_id')
+        return self.queryset.filter(user=self.request.user).order_by('question_id')  # noqa
