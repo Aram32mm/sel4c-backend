@@ -1,9 +1,10 @@
 """
 Views para Metodologia (Actividades y Preguntas)
 """
-from rest_framework import viewsets
+from rest_framework import generics, viewsets
 from rest_framework.authentication import TokenAuthentication
 from rest_framework import permissions
+from rest_framework.exceptions import NotFound, ValidationError
 
 from core.models import (
     Activity,
@@ -28,32 +29,37 @@ class IsSuperUserOrReadOnly(permissions.BasePermission):
 
 
 class ActivityViewSet(viewsets.ModelViewSet):
-    """View para manejar APIs de Actividad"""
+    """Administra las Actividades (Se tiene que ser SuperAdmin)"""
     serializer_class = serializers.ActivitySerializer
-    queryset = Activity.objects.all()
+    queryset = Activity.objects.all().order_by('title')
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsSuperUserOrReadOnly]
+
+
+class SubActivityViewSet(generics.ListAPIView):
+    """Devuelve las Sub-Activities de una Actividad Padre (Se tiene que ser SuperAdmin)"""  # noqa
+    serializer_class = serializers.ActivitySerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsSuperUserOrReadOnly]
 
     def get_queryset(self):
-        """Recupera Actividades para Usuario Autenticado"""
-        return self.queryset.order_by('id')
+        parent_activity_id = self.kwargs.get('id')
 
-    def perform_create(self, serializer):
-        """Crea nueva actividad"""
-        serializer.save()
+        if parent_activity_id:
+            try:
+                parent_activity = Activity.objects.get(pk=parent_activity_id)
+                queryset = parent_activity.sub_activities.all().order_by('title')  # noqa
+            except Activity.DoesNotExist:
+                raise NotFound(detail="Parent activity does not exist")
+        else:
+            raise ValidationError("Parent activity ID is required.")
+
+        return queryset
 
 
 class FormsQuestionViewSet(viewsets.ModelViewSet):
-    """View para manejar APIs de Pregunta de Forms"""
+    """Administra las Preguntas del Forms (Se tiene que ser SuperAdmin)"""
     serializer_class = serializers.FormsQuestionSerializer
     queryset = FormsQuestion.objects.all()
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsSuperUserOrReadOnly]
-
-    def get_queryset(self):
-        """Recupera Preguntas del Forms para Usuario Autenticado"""
-        return self.queryset.order_by('id')
-
-    def perform_create(self, serializer):
-        """Crea nueva pregunta de forms """
-        serializer.save()

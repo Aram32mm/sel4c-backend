@@ -17,6 +17,15 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id']
 
+    def create(self, validated_data):
+        return Activity.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance
+
 
 class FormsQuestionSerializer(serializers.ModelSerializer):
     """Serializer para Pregunta de Forms"""
@@ -25,3 +34,12 @@ class FormsQuestionSerializer(serializers.ModelSerializer):
         model = FormsQuestion
         fields = '__all__'
         read_only_fields = ['id']
+
+    def create(self, validated_data):
+        return FormsQuestion.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance

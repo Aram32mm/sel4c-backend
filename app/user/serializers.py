@@ -40,7 +40,7 @@ class UserDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserData
         fields = '__all__'
-        read_only_fields = ['user']
+        read_only_fields = ['id', 'user']
 
     def create(self, validated_data):
         user = self.context['request'].user

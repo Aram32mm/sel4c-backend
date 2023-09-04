@@ -73,7 +73,7 @@ class UserData(models.Model):
 
 
 class Activity(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
     description = models.TextField()
     parent_activity = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='sub_activities')  # noqa
 
