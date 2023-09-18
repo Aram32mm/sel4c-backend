@@ -1,6 +1,9 @@
 """
 Modelos de BD
 """
+import uuid
+import os
+
 from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
@@ -9,6 +12,24 @@ from django.contrib.auth.models import (
     BaseUserManager,
     PermissionsMixin,
 )
+
+
+def activity_media_response_file_path(instance, filename):
+    """Genera la ruta del archivo para la nueva respuesta"""
+    ext = os.path.splitext(filename)[1]
+    filename = f'{uuid.uuid4()}{ext}'
+
+    # Determina la carpeta destino en función del tipo de archivo
+    if ext in ['.jpg', '.jpeg', '.png', '.gif']:
+        type = 'image'
+    elif ext in ['.mp4', '.avi', '.mov']:
+        type = 'video'
+    elif ext in ['.wav', '.mp3', '.ogg']:
+        type = 'audio'
+    else:
+        type = 'other'  # Otras extensiones de archivo
+
+    return os.path.join('uploads', type, filename)
 
 
 class UserManager(BaseUserManager):
@@ -64,21 +85,12 @@ class UserData(models.Model):
     academic_degree = models.CharField(max_length=255)
     institution = models.CharField(max_length=255)
     gender = models.CharField(max_length=255)
-    birthday = models.DateField(auto_now=False, auto_now_add=False)
+    age = models.IntegerField()
     country = models.CharField(max_length=255)
     discipline = models.CharField(max_length=255)
 
     def __str__(self):
         return self.full_name
-
-
-class Activity(models.Model):
-    title = models.CharField(max_length=100, unique=True)
-    description = models.TextField()
-    parent_activity = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='sub_activities')  # noqa
-
-    def __str__(self):
-        return self.title
 
 
 class FormsQuestion(models.Model):
@@ -88,26 +100,6 @@ class FormsQuestion(models.Model):
 
     def __str__(self):
         return self.question
-
-
-class ActivityResponse(models.Model):
-    """Objeto de Respuesta de Actividad"""
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-    )
-    activity = models.ForeignKey(
-        Activity,
-        on_delete=models.CASCADE,
-    )
-    response = models.TextField()
-    time_minutes = models.IntegerField()
-
-    def __str__(self):
-        return self.response
-
-    class Meta:
-        unique_together = ('user', 'activity')
 
 
 class FormsQuestionResponse(models.Model):
@@ -120,11 +112,51 @@ class FormsQuestionResponse(models.Model):
         FormsQuestion,
         on_delete=models.CASCADE,
     )
-    response = models.TextField()
+    score = models.PositiveIntegerField()
     time_minutes = models.IntegerField()
 
     def __str__(self):
-        return self.response
+        return f"User: {self.user.name} - Question: {self.question.question}"  # noqa
 
     class Meta:
         unique_together = ('user', 'question')
+
+
+class Activity(models.Model):
+    title = models.CharField(max_length=100, unique=True)
+    description = models.TextField()
+    parent_activity = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='sub_activities')  # noqa
+
+    def __str__(self):
+        return self.title
+
+
+class ActivityResponse(models.Model):
+    """Objeto de Respuesta de Actividad"""
+    RESPONSE_TYPES = (
+        ('text', 'Text'),
+        ('image', 'Image'),
+        ('video', 'Video'),
+        ('audio', 'Audio'),
+    )
+
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+    )
+    response_type = models.CharField(max_length=10, choices=RESPONSE_TYPES)
+    string_response = models.TextField(null=True)
+    image_response = models.ImageField(null=True, upload_to=activity_media_response_file_path)  # noqa
+    video_response = models.FileField(null=True, upload_to=activity_media_response_file_path)  # noqa
+    audio_response = models.FileField(null=True, upload_to=activity_media_response_file_path)  # noqa
+    time_minutes = models.IntegerField()
+
+    def __str__(self):
+        return f"{self.user.name} | {self.activity.title} ({self.response_type} response)"  # noqa
+
+    class Meta:
+        unique_together = ('user', 'activity')

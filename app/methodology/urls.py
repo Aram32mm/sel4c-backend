@@ -19,5 +19,5 @@ app_name = 'methodology'
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('sub-activities/<int:id>/', views.SubActivityView.as_view(), name='sub-activities'),  # noqa
+    path('sub-activities/<int:parent_activity_id>/', views.SubActivityView.as_view(), name='sub-activities'),  # noqa
 ]

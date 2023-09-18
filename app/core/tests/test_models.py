@@ -1,6 +1,7 @@
 """
 Tests para modelos
 """
+from unittest.mock import patch
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
@@ -66,7 +67,7 @@ class ModelTests(TestCase):
             academic_degree='Academic Degree',
             institution='SEL4C',
             gender='Male',
-            birthday='2023-09-15',
+            age=18,
             country='Mexico',
             discipline='STEM',
         )
@@ -103,14 +104,16 @@ class ModelTests(TestCase):
             title='Sample activity name ',
             description='Sample activity description.',
         )
+        response_type = 'text'
         activity_response = models.ActivityResponse.objects.create(
             user=user,
             activity=activity,
-            response='Response',
+            response_type=response_type,
+            string_response='sample response',
             time_minutes=5,
         )
 
-        self.assertEqual(str(activity_response), activity_response.response)
+        self.assertEqual(str(activity_response), f"{user.name} | {activity.title} ({response_type} response)")  # noqa
 
     def test_forms_question_response(self):
         """Test respondiendo una pregunta del forms"""
@@ -125,8 +128,17 @@ class ModelTests(TestCase):
         formquestion_response = models.FormsQuestionResponse.objects.create(
             user=user,
             question=formsquestion,
-            response='Response',
+            score=1,
             time_minutes=5,
         )
 
-        self.assertEqual(str(formquestion_response), formquestion_response.response)  # noqa
+        self.assertEqual(str(formquestion_response), f"User: {formquestion_response.user.name} - Question: {formquestion_response.question.question}")  # noqa
+
+    @patch('core.models.uuid.uuid4')
+    def test_response_file_name_uuid(self, mock_uuid):
+        """Test generando path de imagen"""
+        uuid = 'test-uuid'
+        mock_uuid.return_value = uuid
+        file_path = models.activity_media_response_file_path(None, 'example.jpg')  # noqa
+
+        self.assertEqual(file_path, f'uploads/image/{uuid}.jpg')

@@ -12,14 +12,13 @@ from response import views
 
 
 router = DefaultRouter()
-router.register('activity', views.ActivityResponseViewSet)
-router.register('question', views.FormsQuestionResponseViewSet)
+router.register('activity', views.ActivityResponseView)
 
 app_name = 'response'
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('activities-responses/', views.AllActivitiesResponsesView.as_view(), name ="activites responses"),  # noqa
-    path('questions-responses/', views.AllFormsQuestionResponsesView.as_view(), name ="questions responses"),  # noqa
-
+    # Para el Forms
+    path('retrieve-forms/', views.AllFormsQuestionResponsesView.as_view(), name ="all forms responses"),  # noqa
+    path('add/forms-response/<int:question_id>', views.CreateFormsQuestionResponseView.as_view(), name ="user question response"),  # noqa
 ]

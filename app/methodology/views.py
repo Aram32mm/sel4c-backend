@@ -40,7 +40,7 @@ class SubActivityView(generics.ListAPIView):
     permission_classes = [IsSuperUserOrReadOnly]
 
     def get_queryset(self):
-        parent_activity_id = self.kwargs.get('id')
+        parent_activity_id = self.kwargs.get('parent_activity_id')
 
         if parent_activity_id:
             try:
