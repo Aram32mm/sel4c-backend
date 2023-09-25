@@ -11,7 +11,7 @@ app_name = 'user'
 urlpatterns = [
     # Crea usuario
     path('create/', views.CreateUserView.as_view(), name='create'),
-    path('info/add/', views.UserPersonalDataCreateView.as_view(), name='add_info'),
+    path('info/add/', views.UserPersonalDataCreateView.as_view(), name='add_info'),  # noqa
 
     # Gnera token
     path('token/', views.CreateTokenView.as_view(), name='token'),
@@ -24,7 +24,7 @@ urlpatterns = [
     path('infos/', views.AllUserDataView.as_view(), name='get_info'),
 
     # Agrega scores iniciales
-    path('scores/initial', views.UserInitialScorePostView.as_view(), name='initial_scores'),
+    path('scores/initial', views.UserInitialScorePostView.as_view(), name='initial_scores'),  # noqa
     # Agrega scores finales
-    path('scores/final', views.UserFinalScorePostView.as_view(), name='final_scores'),
+    path('scores/final', views.UserFinalScorePostView.as_view(), name='final_scores'),  # noqa
 ]
