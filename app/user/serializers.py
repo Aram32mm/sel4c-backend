@@ -8,11 +8,11 @@ from django.contrib.auth import (
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
-from core.models import UserData
+from core.models import UserData, UserInitialScore, UserFinalScore
 
 
 class UserSerializer(serializers.ModelSerializer):
-    """Serializador para el objeto de usuario."""
+    """Serializador para el modelo de usuario."""
 
     class Meta:
         model = get_user_model()
@@ -37,6 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserDataSerializer(serializers.ModelSerializer):
+    """Serializador para el modelo de información de usuario"""
     class Meta:
         model = UserData
         fields = '__all__'
@@ -51,6 +52,30 @@ class UserDataSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
         return instance
+
+
+class UserInitialScoreSerializer(serializers.ModelSerializer):
+    """Serializador para el modelo de scores iniciales de usuario"""
+    class Meta:
+        model = UserInitialScore
+        fields = '__all__'
+        read_only_fields = ['id', 'user']
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        return UserData.objects.create(user=user, **validated_data)
+
+
+class UserFinalScoreSerializer(serializers.ModelSerializer):
+    """Serializador para el modelo de scores finales de usuario"""
+    class Meta:
+        model = UserFinalScore
+        fields = '__all__'
+        read_only_fields = ['id', 'user']
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        return UserData.objects.create(user=user, **validated_data)
 
 
 class AuthTokenSerializer(serializers.Serializer):

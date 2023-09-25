@@ -11,6 +11,8 @@ from user.serializers import (
     UserSerializer,
     AuthTokenSerializer,
     UserDataSerializer,
+    UserInitialScoreSerializer,
+    UserFinalScoreSerializer,
 )
 from core.models import UserData
 
@@ -37,7 +39,6 @@ class UserPersonalDataCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
-        # Automatically link the user to the UserData instance
         serializer.save()
 
 
@@ -55,6 +56,26 @@ class UserPersonalDataView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return UserData.objects.get(user=self.request.user)
+
+
+class UserInitialScorePostView(generics.CreateAPIView):
+    """Agrega los scores iniciales de Usuario (Requiere Autenticación)"""
+    serializer_class = UserInitialScoreSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+
+class UserFinalScorePostView(generics.CreateAPIView):
+    """Agrega los scores finales de Usuario (Requiere Autenticación)"""
+    serializer_class = UserFinalScoreSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save()
 
 
 class CreateTokenView(ObtainAuthToken):

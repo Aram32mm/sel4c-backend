@@ -6,6 +6,7 @@ import os
 
 from django.conf import settings
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.utils.timezone import now
 from django.contrib.auth.models import (
     AbstractBaseUser,
@@ -91,6 +92,92 @@ class UserData(models.Model):
 
     def __str__(self):
         return self.full_name
+
+
+class UserInitialScore(models.Model):
+    """Objeto de Scores de Usuario"""
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    self_control_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    leadership_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    consciousness_and_social_value_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    social_innovation_and_financial_sustainability_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    systemic_thinking_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    scientific_thinking_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    critical_thinking_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    innovative_thinking_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+
+    def __str__(self):
+        return self.user.email
+
+
+class UserFinalScore(models.Model):
+    """Objeto de Scores de Usuario"""
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    self_control_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    leadership_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    consciousness_and_social_value_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    social_innovation_and_financial_sustainability_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    systemic_thinking_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    scientific_thinking_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    critical_thinking_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+    innovative_thinking_score = models.IntegerField(
+        default=0,
+        validators=[MaxValueValidator(100), MinValueValidator(0)]
+    )
+
+    def __str__(self):
+        return self.user.email
 
 
 class FormsQuestion(models.Model):
