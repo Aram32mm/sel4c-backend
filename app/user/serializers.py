@@ -63,7 +63,7 @@ class UserInitialScoreSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
-        return UserData.objects.create(user=user, **validated_data)
+        return UserInitialScore.objects.create(user=user, **validated_data)
 
 
 class UserFinalScoreSerializer(serializers.ModelSerializer):
@@ -75,7 +75,7 @@ class UserFinalScoreSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = self.context['request'].user
-        return UserData.objects.create(user=user, **validated_data)
+        return UserFinalScore.objects.create(user=user, **validated_data)
 
 
 class AuthTokenSerializer(serializers.Serializer):

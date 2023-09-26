@@ -11,13 +11,14 @@ app_name = 'user'
 urlpatterns = [
     # Crea usuario
     path('create/', views.CreateUserView.as_view(), name='create'),
-    path('info/add/', views.UserPersonalDataCreateView.as_view(), name='add_info'),  # noqa
 
-    # Gnera token
+    # Genera token
     path('token/', views.CreateTokenView.as_view(), name='token'),
     # Administra usuario autenticado
     path('me/', views.ManageUserView.as_view(), name='me'),
 
+    # agrega info al usuario
+    path('info/add/', views.UserPersonalDataCreateView.as_view(), name='add_info'),  # noqa
     # Administra info de autenticado
     path('info/me', views.UserPersonalDataView.as_view(), name='info'),
     # Recaba informaciones para admins
