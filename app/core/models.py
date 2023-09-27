@@ -91,13 +91,14 @@ class UserData(models.Model):
     discipline = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.full_name
+        return self.user.email
 
 
 class UserInitialScore(models.Model):
     """Objeto de Scores de Usuario"""
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
+        unique=True,
         on_delete=models.CASCADE,
     )
     self_control_score = models.IntegerField(
@@ -141,6 +142,7 @@ class UserFinalScore(models.Model):
     """Objeto de Scores de Usuario"""
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
+        unique=True,
         on_delete=models.CASCADE,
     )
     self_control_score = models.IntegerField(
@@ -182,7 +184,7 @@ class UserFinalScore(models.Model):
 
 class FormsQuestion(models.Model):
     """Objeto de Pregunta de Formulario """
-    question = models.CharField(max_length=100)
+    question = models.TextField()
     description = models.TextField(blank=True)
 
     def __str__(self):
@@ -203,7 +205,7 @@ class FormsQuestionResponse(models.Model):
     time_minutes = models.IntegerField()
 
     def __str__(self):
-        return f"User: {self.user.name} - Question: {self.question.question}"  # noqa
+        return f"{self.user.email} | {self.question.question}"  # noqa
 
     class Meta:
         unique_together = ('user', 'question')
@@ -211,7 +213,7 @@ class FormsQuestionResponse(models.Model):
 
 class Activity(models.Model):
     title = models.CharField(max_length=100, unique=True)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     parent_activity = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='sub_activities')  # noqa
 
     def __str__(self):
@@ -243,7 +245,7 @@ class ActivityResponse(models.Model):
     time_minutes = models.IntegerField()
 
     def __str__(self):
-        return f"{self.user.name} | {self.activity.title} ({self.response_type} response)"  # noqa
+        return f"{self.user.email} | {self.activity.title} | ({self.response_type} response)"  # noqa
 
     class Meta:
         unique_together = ('user', 'activity')

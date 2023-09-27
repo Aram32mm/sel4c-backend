@@ -30,7 +30,7 @@ class AllFormsQuestionResponsesView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        is_admin = self.request.user.is_staff
+        is_admin = self.request.user.is_superuser
 
         if is_admin:
             queryset = FormsQuestionResponse.objects.all().order_by('user__id')

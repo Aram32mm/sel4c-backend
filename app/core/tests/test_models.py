@@ -72,7 +72,7 @@ class ModelTests(TestCase):
             discipline='STEM',
         )
 
-        self.assertEqual(str(data), data.full_name)
+        self.assertEqual(str(data), user.email)
 
     def test_create_activity(self):
         """Test creando una actividad"""
@@ -113,7 +113,7 @@ class ModelTests(TestCase):
             time_minutes=5,
         )
 
-        self.assertEqual(str(activity_response), f"{user.name} | {activity.title} ({response_type} response)")  # noqa
+        self.assertEqual(str(activity_response), f"{user.email} | {activity.title} | ({activity_response.response_type} response)")  # noqa
 
     def test_forms_question_response(self):
         """Test respondiendo una pregunta del forms"""
@@ -132,7 +132,7 @@ class ModelTests(TestCase):
             time_minutes=5,
         )
 
-        self.assertEqual(str(formquestion_response), f"User: {formquestion_response.user.name} - Question: {formquestion_response.question.question}")  # noqa
+        self.assertEqual(str(formquestion_response), f"{user.email} | {formsquestion.question}")  # noqa
 
     @patch('core.models.uuid.uuid4')
     def test_response_file_name_uuid(self, mock_uuid):

@@ -14,12 +14,23 @@ from user.serializers import (
     UserInitialScoreSerializer,
     UserFinalScoreSerializer,
 )
-from core.models import UserData
+from core.models import UserData, UserInitialScore, UserFinalScore
 
 
 class CreateUserView(generics.CreateAPIView):
     """Crea un nuevo usuario en el sistema (No requiere Autenticación)"""
     serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(is_staff=False, is_superuser=False)
+
+
+class CreateAdminView(generics.CreateAPIView):
+    """Crea un nuevo usuario en el sistema (No requiere Autenticación)"""
+    serializer_class = UserSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(is_staff=True, is_superuser=True)
 
 
 class AllUserDataView(generics.ListAPIView):
@@ -58,21 +69,41 @@ class UserPersonalDataView(generics.RetrieveUpdateAPIView):
         return UserData.objects.get(user=self.request.user)
 
 
-class UserInitialScorePostView(generics.CreateAPIView):
-    """Agrega los scores iniciales de Usuario (Requiere Autenticación)"""
+class UserInitialScorePostView(generics.ListCreateAPIView):
+    """Maneja los scores iniciales de Usuario (Requiere Autenticación)"""
     serializer_class = UserInitialScoreSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        is_admin = self.request.user.is_superuser
+
+        if is_admin:
+            queryset = UserInitialScore.objects.all().order_by('user__id')
+        else:
+            queryset = UserInitialScore.objects.filter(user=self.request.user)
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save()
 
 
-class UserFinalScorePostView(generics.CreateAPIView):
-    """Agrega los scores finales de Usuario (Requiere Autenticación)"""
+class UserFinalScorePostView(generics.ListCreateAPIView):
+    """Maneja los scores finales de Usuario (Requiere Autenticación)"""
     serializer_class = UserFinalScoreSerializer
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        is_admin = self.request.user.is_superuser
+
+        if is_admin:
+            queryset = UserFinalScore.objects.all().order_by('user__id')
+        else:
+            queryset = UserFinalScore.objects.filter(user=self.request.user)
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save()
