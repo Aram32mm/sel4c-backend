@@ -3,6 +3,7 @@ Vistas para la API de usuario.
 """
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework import permissions
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
@@ -17,6 +18,16 @@ from user.serializers import (
 from core.models import UserData, UserInitialScore, UserFinalScore
 
 
+class IsSuperUser(permissions.BasePermission):
+    """
+    Permiso personalizado para permitir que los superusuarios
+    puedan crear otros superusuarios
+    """
+
+    def has_permission(self, request, view):
+        return request.user.is_superuser
+
+
 class CreateUserView(generics.CreateAPIView):
     """Crea un nuevo usuario en el sistema (No requiere Autenticación)"""
     serializer_class = UserSerializer
@@ -28,6 +39,8 @@ class CreateUserView(generics.CreateAPIView):
 class CreateAdminView(generics.CreateAPIView):
     """Crea un nuevo usuario en el sistema (No requiere Autenticación)"""
     serializer_class = UserSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsSuperUser]
 
     def perform_create(self, serializer):
         serializer.save(is_staff=True, is_superuser=True)
