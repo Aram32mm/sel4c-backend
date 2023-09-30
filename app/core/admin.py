@@ -64,11 +64,8 @@ class UserDataAdmin(admin.ModelAdmin):
     """Defininiendo la pagina admin de user data"""
     fields = ['user', 'full_name', 'academic_degree',
               'institution', 'gender', 'age', 'country', 'discipline']
-    """
     readonly_fields = ['id', 'user', 'full_name', 'academic_degree',
                        'institution', 'gender', 'age', 'country', 'discipline']
-
-    """
 
     class Meta:
         model = models.UserData
@@ -80,13 +77,11 @@ class UserInitialScoreAdmin(admin.ModelAdmin):
               'social_innovation_and_financial_sustainability_score',
               'systemic_thinking_score', 'scientific_thinking_score',
               'critical_thinking_score', 'innovative_thinking_score']
-    """
     readonly_fields = ['user', 'self_control_score', 'leadership_score',
                        'consciousness_and_social_value_score',
                        'social_innovation_and_financial_sustainability_score',
                        'systemic_thinking_score', 'scientific_thinking_score',
                        'critical_thinking_score', 'innovative_thinking_score']
-    """
 
     class Meta:
         model = models.UserInitialScore
@@ -98,13 +93,12 @@ class UserFinalScoreAdmin(admin.ModelAdmin):
               'social_innovation_and_financial_sustainability_score',
               'systemic_thinking_score', 'scientific_thinking_score',
               'critical_thinking_score', 'innovative_thinking_score']
-    """
     readonly_fields = ['user', 'self_control_score', 'leadership_score',
                        'consciousness_and_social_value_score',
                        'social_innovation_and_financial_sustainability_score',
                        'systemic_thinking_score', 'scientific_thinking_score',
                        'critical_thinking_score', 'innovative_thinking_score']
-    """
+
     class Meta:
         model = models.UserFinalScore
 
