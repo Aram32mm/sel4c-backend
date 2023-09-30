@@ -2,8 +2,10 @@
 Vistas para la API de usuario.
 """
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
@@ -13,9 +15,9 @@ from user.serializers import (
     AuthTokenSerializer,
     UserDataSerializer,
     UserInitialScoreSerializer,
-    UserFinalScoreSerializer,
+    UserFinalScoreSerializer
 )
-from core.models import UserData, UserInitialScore, UserFinalScore
+from core.models import User, UserData, UserInitialScore, UserFinalScore
 
 
 class IsSuperUser(permissions.BasePermission):
@@ -46,16 +48,6 @@ class CreateAdminView(generics.CreateAPIView):
         serializer.save(is_staff=True, is_superuser=True)
 
 
-class AllUserDataView(generics.ListAPIView):
-    """Lista Toda la Info de todos los Usuarios para Admins (Requiere Autenticación)"""  # noqa
-    serializer_class = UserDataSerializer
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAdminUser]
-
-    def get_queryset(self):
-        return UserData.objects.all()
-
-
 class UserPersonalDataCreateView(generics.CreateAPIView):
     """Agrega la Info de Nuevos Usuarios (Requiere Autenticación)"""
     serializer_class = UserDataSerializer
@@ -80,6 +72,48 @@ class UserPersonalDataView(generics.RetrieveUpdateAPIView):
 
     def get_object(self):
         return UserData.objects.get(user=self.request.user)
+
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsSuperUser])
+def users_info(request):
+    """Devuelve toda la información de los usuarios."""
+    user_data = UserData.objects.filter(user__is_superuser=False)
+
+    combined_data = []
+
+    for user_data_item in user_data:
+
+        combined_item = {
+            # Campos de Usuario
+            'user': user_data_item.user.pk,
+            'name': user_data_item.user.name,
+            'email': user_data_item.user.email,
+            # Campos de Datos de Usuarios
+            'full_name': user_data_item.full_name,
+            'academic_degree': user_data_item.academic_degree,
+            'institution': user_data_item.institution,
+            'gender': user_data_item.gender,
+            'age': user_data_item.age,
+            'country': user_data_item.country
+        }
+
+        initial_score = UserInitialScore.objects.filter(user=user_data_item.user).first()
+        if initial_score:
+            combined_item['initial_score'] = UserInitialScoreSerializer(initial_score).data
+        else:
+            combined_item['initial_score'] = 0  # Default value
+
+        final_score =  UserFinalScore.objects.filter(user=user_data_item.user).first()
+        if final_score:
+            combined_item['final_score'] = UserFinalScoreSerializer(final_score).data
+        else:
+            combined_item['final_score'] = 0  # Default value
+
+        combined_data.append(combined_item)
+
+    return Response(combined_data)
 
 
 class UserInitialScorePostView(generics.ListCreateAPIView):

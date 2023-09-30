@@ -22,8 +22,9 @@ urlpatterns = [
     path('info/add/', views.UserPersonalDataCreateView.as_view(), name='add_info'),  # noqa
     # Administra info de autenticado
     path('info/me', views.UserPersonalDataView.as_view(), name='info'),
+
     # Recaba informaciones para admins
-    path('infos/', views.AllUserDataView.as_view(), name='get_info'),
+    path('info/all', views.users_info, name='all_info'),
 
     # Agrega scores iniciales
     path('scores/initial', views.UserInitialScorePostView.as_view(), name='initial_scores'),  # noqa
