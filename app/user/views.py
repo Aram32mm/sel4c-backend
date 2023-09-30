@@ -4,7 +4,11 @@ Vistas para la API de usuario.
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
-from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.decorators import (
+    api_view,
+    authentication_classes,
+    permission_classes
+)
 from rest_framework.response import Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
@@ -17,7 +21,7 @@ from user.serializers import (
     UserInitialScoreSerializer,
     UserFinalScoreSerializer
 )
-from core.models import User, UserData, UserInitialScore, UserFinalScore
+from core.models import UserData, UserInitialScore, UserFinalScore
 
 
 class IsSuperUser(permissions.BasePermission):
@@ -99,15 +103,15 @@ def users_info(request):
             'country': user_data_item.country
         }
 
-        initial_score = UserInitialScore.objects.filter(user=user_data_item.user).first()
+        initial_score = UserInitialScore.objects.filter(user=user_data_item.user).first()  # noqa
         if initial_score:
-            combined_item['initial_score'] = UserInitialScoreSerializer(initial_score).data
+            combined_item['initial_score'] = UserInitialScoreSerializer(initial_score).data  # noqa
         else:
             combined_item['initial_score'] = 0  # Default value
 
-        final_score =  UserFinalScore.objects.filter(user=user_data_item.user).first()
+        final_score =  UserFinalScore.objects.filter(user=user_data_item.user).first()  # noqa
         if final_score:
-            combined_item['final_score'] = UserFinalScoreSerializer(final_score).data
+            combined_item['final_score'] = UserFinalScoreSerializer(final_score).data  # noqa
         else:
             combined_item['final_score'] = 0  # Default value
 

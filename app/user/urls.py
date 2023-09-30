@@ -11,7 +11,7 @@ app_name = 'user'
 urlpatterns = [
     # Crea usuario
     path('create', views.CreateUserView.as_view(), name='create'),
-    path('create/with-permissions', views.CreateAdminView.as_view(), name='create'),  # noqa
+    path('create/admin', views.CreateAdminView.as_view(), name='create_admin'),  # noqa
 
     # Genera token
     path('token/', views.CreateTokenView.as_view(), name='token'),
