@@ -4,3 +4,4 @@ psycopg2>=2.9.7,<2.10
 drf-spectacular>=0.26.4,<0.27
 Pillow>=10.0.0,<11
 uwsgi>=2.0.22,<21
+django-cors-headers==4.2.0
