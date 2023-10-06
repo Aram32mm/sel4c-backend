@@ -4,16 +4,18 @@ Vistas para la API de usuario.
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import permissions
+from rest_framework import status
 from rest_framework.decorators import (
     api_view,
     authentication_classes,
     permission_classes
 )
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
-
+from django.contrib.auth import get_user_model
 from user.serializers import (
     UserSerializer,
     AuthTokenSerializer,
@@ -82,7 +84,7 @@ class UserPersonalDataView(generics.RetrieveUpdateAPIView):
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsSuperUser])
 def users_info(request):
-    """Devuelve toda la información de los usuarios."""
+    """Devuelve toda la información de los usuarios (Requiere Autenticación)"""
     user_data = UserData.objects.filter(user__is_superuser=False)
 
     combined_data = []
@@ -94,6 +96,7 @@ def users_info(request):
             'user': user_data_item.user.pk,
             'name': user_data_item.user.name,
             'email': user_data_item.user.email,
+            'is_active': user_data_item.user.is_active,
             # Campos de Datos de Usuarios
             'full_name': user_data_item.full_name,
             'academic_degree': user_data_item.academic_degree,
@@ -118,6 +121,39 @@ def users_info(request):
         combined_data.append(combined_item)
 
     return Response(combined_data)
+
+@api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsSuperUser])
+def admins_info(request):
+    """Devuelve toda la información de los admins (Requiere Autenticación)"""
+    user_data = get_user_model().objects.filter(is_superuser=True)
+
+    combined_data = []
+
+    for user_data_item in user_data:
+
+        combined_item = {
+            # Campos de Usuario
+            'user': user_data_item.pk,
+            'name': user_data_item.name,
+            'email': user_data_item.email,
+            'is_active': user_data_item.is_active
+        }
+
+        combined_data.append(combined_item)
+
+    return Response(combined_data)
+
+@api_view(['DELETE'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsSuperUser])
+def deactivate_user(request, user_id):
+    """Desactiva a un usuario (Requiere Autenticación)"""
+    user = get_object_or_404(get_user_model(), id=user_id)
+    user.is_active = False
+    user.save()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class UserInitialScorePostView(generics.ListCreateAPIView):

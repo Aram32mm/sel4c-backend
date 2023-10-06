@@ -10,8 +10,10 @@ app_name = 'user'
 
 urlpatterns = [
     # Crea usuario
-    path('create', views.CreateUserView.as_view(), name='create'),
-    path('create/admin', views.CreateAdminView.as_view(), name='create_admin'),  # noqa
+    path('create/', views.CreateUserView.as_view(), name='create'),
+    path('admin/create/', views.CreateAdminView.as_view(), name='create_admin'),  # noqa
+    path('deactivate/<int:user_id>/', views.deactivate_user, name='deactivate-user'),  # noqa
+
 
     # Genera token
     path('token/', views.CreateTokenView.as_view(), name='token'),
@@ -21,13 +23,14 @@ urlpatterns = [
     # agrega info al usuario
     path('info/add/', views.UserPersonalDataCreateView.as_view(), name='add_info'),  # noqa
     # Administra info de autenticado
-    path('info/me', views.UserPersonalDataView.as_view(), name='info'),
+    path('info/me/', views.UserPersonalDataView.as_view(), name='info'),
 
     # Recaba informaciones para admins
-    path('info/all', views.users_info, name='all_info'),
+    path('info/all/', views.users_info, name='all_user_info'),
+    path('admin/info/all/', views.admins_info, name='all_admin_info'),
 
     # Agrega scores iniciales
-    path('scores/initial', views.UserInitialScorePostView.as_view(), name='initial_scores'),  # noqa
+    path('scores/initial/', views.UserInitialScorePostView.as_view(), name='initial_scores'),  # noqa
     # Agrega scores finales
-    path('scores/final', views.UserFinalScorePostView.as_view(), name='final_scores'),  # noqa
+    path('scores/final/', views.UserFinalScorePostView.as_view(), name='final_scores'),  # noqa
 ]

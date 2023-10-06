@@ -12,8 +12,8 @@ from methodology import views
 
 
 router = DefaultRouter()
-router.register('activities', views.ActivityViewSet)
-router.register('formsquestions', views.FormsQuestionViewSet)
+router.register('activities/', views.ActivityViewSet)
+router.register('formsquestions/', views.FormsQuestionViewSet)
 
 app_name = 'methodology'
 
