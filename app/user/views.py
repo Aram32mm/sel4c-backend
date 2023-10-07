@@ -103,7 +103,8 @@ def users_info(request):
             'institution': user_data_item.institution,
             'gender': user_data_item.gender,
             'age': user_data_item.age,
-            'country': user_data_item.country
+            'country': user_data_item.country,
+            'discipline': user_data_item.discipline,
         }
 
         initial_score = UserInitialScore.objects.filter(user=user_data_item.user).first()  # noqa
