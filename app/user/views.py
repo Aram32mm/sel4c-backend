@@ -122,6 +122,7 @@ def users_info(request):
 
     return Response(combined_data)
 
+
 @api_view(['GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsSuperUser])
@@ -144,6 +145,7 @@ def admins_info(request):
         combined_data.append(combined_item)
 
     return Response(combined_data)
+
 
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
