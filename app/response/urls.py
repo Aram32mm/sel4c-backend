@@ -12,7 +12,7 @@ from response import views
 
 
 router = DefaultRouter()
-router.register('activity/', views.ActivityResponseView)
+router.register('activity', views.ActivityResponseView)
 
 app_name = 'response'
 
