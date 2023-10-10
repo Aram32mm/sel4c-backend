@@ -31,7 +31,11 @@ ALLOWED_HOSTS = [
     '*'
 ]
 
-#CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
+
+CORS_ORIGIN_WHITELIST = [
+    "https://master.d39f2q1wftha3q.amplifyapp.com"
+]
 
 ALLOWED_HOSTS.extend(
     filter(
@@ -67,7 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
