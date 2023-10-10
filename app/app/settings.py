@@ -28,10 +28,9 @@ DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 
 ALLOWED_HOSTS = []
+
+CORS_ALLOW_ALL_ORIGINS = True
 """
-CORS_ALLOW_ALL_ORIGINS = False
-
-
 CORS_ORIGIN_WHITELIST = [
     "https://master.d39f2q1wftha3q.amplifyapp.com",
     "http://localhost:9000"
