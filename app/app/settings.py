@@ -27,11 +27,11 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 ALLOWED_HOSTS = [
-    #'localhost'
+    'master.d39f2q1wftha3q.amplifyapp.com'
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    #'http://localhost:3000'
+    'https://master.d39f2q1wftha3q.amplifyapp.com/'
 ]
 
 ALLOWED_HOSTS.extend(
@@ -68,7 +68,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
