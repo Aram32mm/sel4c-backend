@@ -27,11 +27,13 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'changeme')
 DEBUG = bool(int(os.environ.get('DEBUG', 0)))
 
 ALLOWED_HOSTS = [
-    'master.d39f2q1wftha3q.amplifyapp.com'
+    'master.d39f2q1wftha3q.amplifyapp.com',
+    'ec2-54-219-232-127.us-west-1.compute.amazonaws.com'
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://master.d39f2q1wftha3q.amplifyapp.com/'
+    'https://master.d39f2q1wftha3q.amplifyapp.com/',
+    'uwsgi://172.21.0.3:9000'
 ]
 
 ALLOWED_HOSTS.extend(
