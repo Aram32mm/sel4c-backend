@@ -2,7 +2,6 @@
 Asignaciones de URL para la API de usuario
 """
 from django.urls import path, include
-
 from user import views
 
 
