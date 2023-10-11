@@ -5,3 +5,4 @@ drf-spectacular>=0.26.4,<0.27
 Pillow>=10.0.0,<11
 uwsgi>=2.0.22,<21
 django-cors-headers==4.2.0
+django-rest-passwordreset==1.3.0
