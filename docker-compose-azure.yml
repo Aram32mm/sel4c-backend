@@ -7,14 +7,8 @@ services:
     restart: always
     volumes:
       - static-data:/vol/web
-    environment:
-      - DB_HOST=${DB_HOST}
-      - DB_NAME=${DB_NAME}
-      - DB_USER=${DB_USER}
-      - DB_PASS=${DB_PASS}
-      - SECRET_KEY=${DJANGO_SECRET_KEY}
-      - ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS}
-      - FRONT_PORT=${FRONT_PORT}
+    env_file:
+      - ./.env
 
   proxy:
     build:
