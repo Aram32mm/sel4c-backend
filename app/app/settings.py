@@ -30,7 +30,8 @@ FRONT_PORT = os.environ.get("FRONT_PORT", "3000")
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "").split(",")
 
-CORS_ALLOWED_ORIGINS = list(map(lambda host: f"http://{host}:{FRONT_PORT}", ALLOWED_HOSTS))
+CORS_ALLOW_ALL_ORIGINS = True
+# CORS_ALLOWED_ORIGINS = list(map(lambda host: f"http://{host}:{FRONT_PORT}", ALLOWED_HOSTS))
 
 URL_FRONT = os.environ.get("URL_FRONT", f"http://localhost:{FRONT_PORT}")
 
