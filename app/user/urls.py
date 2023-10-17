@@ -13,7 +13,6 @@ urlpatterns = [
     path('admin/create/', views.CreateAdminView.as_view(), name='create_admin'),  # noqa
     path('deactivate/<int:user_id>/', views.deactivate_user, name='deactivate-user'),  # noqa
     path('change-password/', views.ChangePasswordView.as_view(), name='change-password'),  # noqa
-    path('reset-password/', include('django_rest_passwordreset.urls', namespace='password_reset')),  # noqa
 
     # Genera token
     path('token/', views.CreateTokenView.as_view(), name='token'),

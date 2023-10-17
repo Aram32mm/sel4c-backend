@@ -23,9 +23,6 @@ services:
       - DB_PASS=changeme
       - DEBUG=1
       - DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
-      - URL_FRONTEND=http://localhost:3000
-      - SMTP_EMAIL=example@example.com
-      - SMTP_PASSWORD=changeme
     depends_on:
       - db
 

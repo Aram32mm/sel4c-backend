@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     "user",
     "methodology",
     "response",
-    'django_rest_passwordreset',
 ]
 
 MIDDLEWARE = [
@@ -155,16 +154,3 @@ REST_FRAMEWORK = {
 SPECTACULAR_SETTINGS = {
     "COMPONENT_SPLIT_REQUEST": True,
 }
-
-# Email Backend Configuration
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # Replace with your preferred backend
-
-EMAIL_PORT = 587  # Replace with your email port
-EMAIL_USE_TLS = True  # Set to False if your email server doesn't use TLS
-EMAIL_USE_SSL = False  # Set to True if your email server requires SSL
-EMAIL_HOST = 'smtp.gmail.com'  # Replace with your email host for zohomail -> 'smtp.gmail.com'
-EMAIL_HOST_USER = "emirandas1003@gmail.com"  # Replace with your email username
-EMAIL_HOST_PASSWORD = "adct hwgv jeuj xnbd"  # Replace with your email password
-
-# To protect user information
-DJANGO_REST_PASSWORDRESET_NO_INFORMATION_LEAKAGE = True
