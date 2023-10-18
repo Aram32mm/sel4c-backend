@@ -6,7 +6,18 @@ from rest_framework import serializers
 from core.models import (
     ActivityResponse,
     FormsQuestionResponse,
+    ModuleResponseCompletion,
 )
+
+class ModuleResponseCompletionSerializer(serializers.ModelSerializer):
+    """Serializador para el modelo de de finalización de resouesta de un módulo"""  # noqa
+    class Meta:
+        model = ModuleResponseCompletion
+        fields = '__all__'
+        read_only_fields = ['id', 'user', 'parent_activity']
+
+    def create(self, validated_data):
+        return ModuleResponseCompletion.objects.create(**validated_data)
 
 
 class ActivityResponseSerializer(serializers.ModelSerializer):

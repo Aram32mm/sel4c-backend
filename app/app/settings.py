@@ -47,20 +47,21 @@ ALLOWED_HOSTS.extend(
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'corsheaders',
-    'core',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'drf_spectacular',
-    'user',
-    'methodology',
-    'response',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "corsheaders",
+    "core",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "drf_spectacular",
+    "user",
+    "methodology",
+    "response",
+    "swiftcon",
 ]
 
 MIDDLEWARE = [

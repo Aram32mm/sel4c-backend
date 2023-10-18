@@ -249,3 +249,58 @@ class ActivityResponse(models.Model):
 
     class Meta:
         unique_together = ('user', 'activity')
+
+
+class ModuleResponseCompletion(models.Model):
+    """Objeto de Finalización de Resouesta de un Módulo"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    parent_activity = models.ForeignKey(
+        Activity,
+        on_delete=models.CASCADE,
+    )
+    completed = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.user.email} | {self.parent_activity.title} | Completed: {self.completed}"  # noqa
+
+    class Meta:
+        unique_together = ('user', 'parent_activity')
+
+
+class UserPhotoMedia(models.Model):
+    """Objeto de Media de Usuario"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    photo = models.ImageField(null=False, upload_to=activity_media_response_file_path)  # noqa
+
+    def __str__(self):
+        return f"User: {self.user.email} | Photo: {self.activity.title}"  # noqa
+
+
+class UserVideoMedia(models.Model):
+    """Objeto de Media de Usuario"""
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    photo = models.FileField(null=False, upload_to=activity_media_response_file_path)  # noqa
+
+    def __str__(self):
+        return f"User: {self.user.email} | Video: {self.activity.title}"  # noqa
+
+
+class UserUserDefaults(models.Model):
+    """Objeto de Respuesta de Actividad"""
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+    )
+    user_defaults = models.TextField(null=True)
+
+    def __str__(self):
+        return f"User Defaults of {self.user.email}"
