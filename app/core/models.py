@@ -279,7 +279,7 @@ class UserPhotoMedia(models.Model):
     photo = models.ImageField(null=False, upload_to=activity_media_response_file_path)  # noqa
 
     def __str__(self):
-        return f"User: {self.user.email} | Photo: {self.activity.title}"  # noqa
+        return f"User: {self.user.email} | Photo: {self.photo}"  # noqa
 
 
 class UserVideoMedia(models.Model):
@@ -288,10 +288,10 @@ class UserVideoMedia(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
     )
-    photo = models.FileField(null=False, upload_to=activity_media_response_file_path)  # noqa
+    video = models.FileField(null=False, upload_to=activity_media_response_file_path)  # noqa
 
     def __str__(self):
-        return f"User: {self.user.email} | Video: {self.activity.title}"  # noqa
+        return f"User: {self.user.email} | Video: {self.video}"  # noqa
 
 
 class UserUserDefaults(models.Model):

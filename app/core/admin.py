@@ -139,6 +139,38 @@ class ActivityResponseAdmin(admin.ModelAdmin):
         model = models.ActivityResponse
 
 
+class ModuleResponseCompletionAdmin(admin.ModelAdmin):
+    fields = ['id', 'user', 'parent_activity', 'completed']
+    readonly_fields = ['id', 'user', 'parent_activity', 'completed']
+
+    class Meta:
+        model = models.ModuleResponseCompletion
+
+
+class UserPhotoMediaAdmin(admin.ModelAdmin):
+    fields = ['id', 'user', 'photo']
+    readonly_fields = ['id', 'user', 'photo']
+
+    class Meta:
+        model = models.UserPhotoMedia
+
+
+class UserVideoMediaAdmin(admin.ModelAdmin):
+    fields = ['id', 'user', 'video']
+    readonly_fields = ['id', 'user', 'video']
+
+    class Meta:
+        model = models.UserVideoMedia
+
+
+class UserUserDefaultsAdmin(admin.ModelAdmin):
+    fields = ['id', 'user', 'user_defaults']
+    readonly_fields = ['id', 'user', 'user_defaults']
+
+    class Meta:
+        model = models.UserUserDefaults
+
+
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.UserData, UserDataAdmin)
 admin.site.register(models.UserInitialScore, UserInitialScoreAdmin)
@@ -149,3 +181,8 @@ admin.site.register(models.FormsQuestionResponse, FormsQuestionResponseAdmin)
 
 admin.site.register(models.Activity, ActivityAdmin)
 admin.site.register(models.ActivityResponse, ActivityResponseAdmin)
+admin.site.register(models.ModuleResponseCompletion, ModuleResponseCompletionAdmin)  # noqa
+admin.site.register(models.UserPhotoMedia, UserPhotoMediaAdmin)
+admin.site.register(models.UserVideoMedia, UserVideoMediaAdmin)
+
+admin.site.register(models.UserUserDefaults, UserUserDefaultsAdmin)  # noqa
