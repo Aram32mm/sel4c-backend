@@ -1,8 +1,7 @@
 """
 Asignaciones de URL para la API de usuario
 """
-from django.urls import path
-
+from django.urls import path, include
 from user import views
 
 
@@ -13,7 +12,7 @@ urlpatterns = [
     path('create/', views.CreateUserView.as_view(), name='create'),
     path('admin/create/', views.CreateAdminView.as_view(), name='create_admin'),  # noqa
     path('deactivate/<int:user_id>/', views.deactivate_user, name='deactivate-user'),  # noqa
-
+    path('change-password/', views.ChangePasswordView.as_view(), name='change-password'),  # noqa
 
     # Genera token
     path('token/', views.CreateTokenView.as_view(), name='token'),

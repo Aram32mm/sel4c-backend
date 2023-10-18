@@ -15,13 +15,14 @@ from django.shortcuts import get_object_or_404
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.settings import api_settings
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from user.serializers import (
     UserSerializer,
     AuthTokenSerializer,
     UserDataSerializer,
     UserInitialScoreSerializer,
-    UserFinalScoreSerializer
+    UserFinalScoreSerializer,
+    ChangePasswordSerializer
 )
 from core.models import UserData, UserInitialScore, UserFinalScore
 
@@ -158,7 +159,6 @@ def deactivate_user(request, user_id):
     user.save()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-
 class UserInitialScorePostView(generics.ListCreateAPIView):
     """Maneja los scores iniciales de Usuario (Requiere Autenticación)"""
     serializer_class = UserInitialScoreSerializer
@@ -216,3 +216,29 @@ class ManageUserView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         """Recupera y devuelve al usuario"""
         return self.request.user
+
+
+class ChangePasswordView(generics.UpdateAPIView):
+    """Cambia la contraseña del usuario autenticado (Requiere Autenticación)"""
+    serializer_class = ChangePasswordSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        """Recupera y devuelve al usuario"""
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        """Actualiza la contraseña del usuario y devuelve la respuesta"""
+        serializer = ChangePasswordSerializer(data=request.data)
+        if serializer.is_valid():
+            user = self.get_object()
+            if user.check_password(serializer.data.get('old_password')):
+                user.set_password(serializer.data.get('new_password'))
+                user.save()
+                update_session_auth_hash(request, user)  # To update session after password change
+                return Response({'message': 'Password changed successfully.'}, status=status.HTTP_200_OK)
+            return Response({'error': 'Incorrect old password.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Function to send emails
