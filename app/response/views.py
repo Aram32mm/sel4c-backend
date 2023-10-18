@@ -4,7 +4,6 @@ Views para Respuestas de Usuarios a Actividades y Preguntas
 from rest_framework import viewsets, generics, status, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from core.models import ActivityResponse, FormsQuestionResponse
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.authentication import TokenAuthentication
@@ -15,6 +14,9 @@ from drf_spectacular.utils import (
     OpenApiTypes,
 )
 from core.models import (
+    User,
+    Activity,
+    FormsQuestion,
     ActivityResponse,
     FormsQuestionResponse,
     ModuleResponseCompletion

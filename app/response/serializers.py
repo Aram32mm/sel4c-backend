@@ -9,6 +9,7 @@ from core.models import (
     ModuleResponseCompletion,
 )
 
+
 class ModuleResponseCompletionSerializer(serializers.ModelSerializer):
     """Serializador para el modelo de de finalización de resouesta de un módulo"""  # noqa
     class Meta:
