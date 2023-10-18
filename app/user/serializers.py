@@ -115,7 +115,7 @@ class AuthTokenSerializer(serializers.Serializer):
                 token.update(key=second_level_value)
             return token
         except Exception as ex:
-            logging.error(msg=f'Failed to create auth token {ex}', stacklevel=logging.CRITICAL)  #
+            logging.error(msg=f'Failed to create auth token {ex}', stacklevel=logging.CRITICAL)  # noqa
             pass
 
     def validate(self, attrs):  # attrs as attributes
