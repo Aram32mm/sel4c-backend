@@ -4,23 +4,62 @@ Views para Respuestas de Usuarios a Actividades y Preguntas
 from rest_framework import viewsets, generics, status, mixins
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from core.models import ActivityResponse, FormsQuestionResponse
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.authentication import TokenAuthentication
-from core.models import FormsQuestion, Activity, User
 from drf_spectacular.utils import (
     extend_schema_view,
     extend_schema,
     OpenApiParameter,
     OpenApiTypes,
 )
-
-
+from core.models import (
+    User,
+    Activity,
+    FormsQuestion,
+    ActivityResponse,
+    FormsQuestionResponse,
+    ModuleResponseCompletion
+)
 from response.serializers import (
     ActivityResponseSerializer,
     FormsQuestionResponseSerializer,
+    ModuleResponseCompletionSerializer
 )
+
+
+class PostModuleResponseCompletionView(generics.CreateAPIView):
+    """Serializador para el modelo de finalización de respuesta de un módulo"""  # noqa
+    serializer_class = ModuleResponseCompletionSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        user = self.request.user
+        parent_activity_id = self.kwargs.get('parent_activity_id')
+        parent_activity = get_object_or_404(Activity, pk=parent_activity_id)
+        serializer.is_valid(raise_exception=True)
+        serializer.save(user=user, parent_activity=parent_activity)
+
+
+class ListModuleResponseCompletionView(generics.ListAPIView):
+    """Serializador para el modelo de
+       finalización de respuesta de un módulo. \n
+       Un administrador puede ver todos los modulos
+       completados de todos los usuarios."""
+    serializer_class = ModuleResponseCompletionSerializer
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        is_admin = self.request.user.is_superuser
+
+        if is_admin:
+            queryset = ModuleResponseCompletion.objects.all().order_by('user__id')  # noqa
+        else:
+            queryset = ModuleResponseCompletion.objects.filter(user=self.request.user).order_by('parent_activity__id')  # noqa
+
+        return queryset
 
 
 class AllFormsQuestionResponsesView(generics.ListAPIView):
