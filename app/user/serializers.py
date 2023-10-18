@@ -1,10 +1,13 @@
 """
 Serializers para el la Vista de API usuario
 """
+import hashlib
+import logging
 from django.contrib.auth import (
     get_user_model,
     authenticate,
 )
+from rest_framework.authtoken.models import Token
 from django.utils.translation import gettext as _
 
 from rest_framework import serializers
@@ -87,10 +90,39 @@ class AuthTokenSerializer(serializers.Serializer):
         trim_whitespace=False,
     )
 
+    def create_auth_token(self, user):
+        """
+        Crea y Actualiza un Token
+        """
+        try:
+            token = Token.objects.filter(user=user)
+            if not token:
+                token = Token.objects.get_or_create(user=user)
+            else:
+                token = Token.objects.filter(user=user)
+                new_key = token[0].generate_key()
+
+                # Cifra una cadena aleatoria usando SHA1
+                sha1_algorithm = hashlib.sha1()
+                sha1_algorithm.update(new_key.encode('utf-8'))
+                first_level_value = sha1_algorithm.hexdigest()
+
+                # Cifra una cadena aleatoria usando MD5
+                md5_algorithm = hashlib.md5()
+                md5_algorithm.update(first_level_value.encode('utf-8'))
+                second_level_value = md5_algorithm.hexdigest()
+
+                token.update(key=second_level_value)
+            return token
+        except Exception as ex:
+            logging.error(msg=f'Failed to create auth token {ex}', stacklevel=logging.CRITICAL)  #
+            pass
+
     def validate(self, attrs):  # attrs as attributes
         """Valida y autentica al usuario"""
         email = attrs.get('email')
         password = attrs.get('password')
+
         user = authenticate(  # funcion django de autenticación
             request=self.context.get('request'),
             username=email,
@@ -100,5 +132,6 @@ class AuthTokenSerializer(serializers.Serializer):
             msg = _('Unable to authenticate with provided credentials.')
             raise serializers.ValidationError(msg, code='authorization')
 
+        self.create_auth_token(user)
         attrs['user'] = user
         return attrs
