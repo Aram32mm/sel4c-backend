@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'user',
     'methodology',
     'response',
+    'swiftcon',
 ]
 
 MIDDLEWARE = [

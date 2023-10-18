@@ -39,6 +39,7 @@ urlpatterns = [
     path('sel4c/user/', include('user.urls')),
     path('sel4c/methodology/', include('methodology.urls')),
     path('sel4c/response/', include('response.urls')),
+    path('sel4c/swift-connection/', include('swiftcon.urls')),
 ]
 
 if settings.DEBUG:
