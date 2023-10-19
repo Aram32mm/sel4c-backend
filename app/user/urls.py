@@ -16,7 +16,7 @@ urlpatterns = [
 
 
     # Genera token
-    path('token/auth/', views.CreateTokenView.as_view(), name='token'),
+    path('token/', views.CreateTokenView.as_view(), name='token'),
     # Administra usuario autenticado
     path('me/', views.ManageUserView.as_view(), name='me'),
 
